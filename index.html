@@ -3,91 +3,361 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мониторинг загородного дома</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        :root {
+            --bg-color: #f4f4f7;
+            --text-color: #333333;
+            --container-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --primary-color: #0088cc;
+            --kitchen-color: #4CAF50;
+            --boiler-color: #2196F3;
+            --warn-color: #ff9800;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-bg-color, #efeff4);
-            color: var(--tg-theme-text-color, #000000);
-            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
-        }
-        .form-group {
-            margin-bottom: 16px;
-        }
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--tg-theme-hint-color, #8e8e93);
-        }
-        input {
-            width: 100%;
             padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             box-sizing: border-box;
-            border: 1px solid var(--tg-theme-hint-color, #c8c7cc);
-            border-radius: 10px;
-            font-size: 16px;
-            background-color: var(--tg-theme-secondary-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            outline: none;
         }
-        input:focus {
-            border-color: var(--tg-theme-button-color, #2481cc);
-        }
-        button {
+
+        .container {
+            max-width: 480px;
             width: 100%;
-            padding: 14px;
-            background-color: var(--tg-theme-button-color, #2481cc);
-            color: var(--tg-theme-button-text-color, #ffffff);
-            border: none;
+            background: var(--container-bg);
+            padding: 18px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            box-sizing: border-box;
+        }
+
+        /* Главные вкладки */
+        .main-tabs {
+            display: flex;
+            background: #e4e4eb;
             border-radius: 10px;
+            padding: 3px;
+            margin-bottom: 20px;
+        }
+
+        .main-tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: none;
+            border: none;
+            font-weight: 600;
+            font-size: 13px;
+            color: #666;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .main-tab-btn.active {
+            background: #ffffff;
+            color: var(--primary-color);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Поля ввода (Показания) */
+        .input-group {
+            margin-bottom: 14px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #444;
+        }
+
+        .input-group input {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             font-size: 16px;
-            font-weight: bold;
+            outline: none;
+            background: #fafafa;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-color);
+            background: #ffffff;
+        }
+
+        /* Саб-табы для фильтров (Кухня / Котельная) */
+        .sub-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .sub-tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: #f0f0f0;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .sub-tab-btn.active-kitchen {
+            background: var(--kitchen-color);
+            color: #fff;
+            border-color: var(--kitchen-color);
+        }
+
+        .sub-tab-btn.active-boiler {
+            background: var(--boiler-color);
+            color: #fff;
+            border-color: var(--boiler-color);
+        }
+
+        /* Кнопки действий */
+        .btn-send {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
             cursor: pointer;
             margin-top: 10px;
         }
-        button:active {
-            opacity: 0.8;
+
+        .filter-btn {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-kitchen { background: var(--kitchen-color); }
+        .btn-boiler { background: var(--boiler-color); }
+        .btn-warn { background: var(--warn-color); }
+
+        /* Предупреждение */
+        .warn-box {
+            background: #fff8db;
+            border-left: 5px solid #ffc107;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #665c33;
         }
     </style>
 </head>
 <body>
-    <div class="form-group">
-        <label for="day">ДЕНЬ (Электроэнергия)</label>
-        <input type="number" id="day" inputmode="decimal" placeholder="Ведите показания">
+
+<div class="container">
+    <!-- Навигация верхнего уровня -->
+    <div class="main-tabs">
+        <button class="main-tab-btn active" onclick="switchMainTab('tab-resources')">📊 Показания</button>
+        <button class="main-tab-btn" onclick="switchMainTab('tab-salt')">🧂 Соль</button>
+        <button class="main-tab-btn" onclick="switchMainTab('tab-filters')">🔧 Фильтры</button>
     </div>
-    <div class="form-group">
-        <label for="night">НОЧЬ (Электроэнергия)</label>
-        <input type="number" id="night" inputmode="decimal" placeholder="Ведите показания">
+
+    <!-- 1. ВКЛАДКА: ПОКАЗАНИЯ -->
+    <div id="tab-resources" class="tab-content active">
+        <div class="input-group">
+            <label>Эл. День (Показания):</label>
+            <input type="number" step="0.1" id="elec-day" placeholder="например, 2288.6">
+        </div>
+        <div class="input-group">
+            <label>Эл. Ночь (Показания):</label>
+            <input type="number" step="0.1" id="elec-night" placeholder="например, 1107.4">
+        </div>
+        <div class="input-group">
+            <label>Газ (Показания):</label>
+            <input type="number" id="gas" placeholder="например, 31736">
+        </div>
+        <button class="btn-send" onclick="sendResources()">Отправить показания</button>
     </div>
-    <div class="form-group">
-        <label for="gas">ГАЗ</label>
-        <input type="number" id="gas" inputmode="decimal" placeholder="Ведите показания">
+
+    <!-- 2. ВКЛАДКА: СОЛЬ -->
+    <div id="tab-salt" class="tab-content">
+        <div class="input-group">
+            <label>Дата добавления соли:</label>
+            <input type="date" id="salt-date">
+        </div>
+        <div class="input-group">
+            <label>Количество мешков (по 25 кг):</label>
+            <input type="number" id="salt-count" value="1" min="1">
+        </div>
+        <button class="btn-send" style="background:#9c27b0;" onclick="sendSalt()">Зафиксировать соль</button>
     </div>
-    <button onclick="submitData()">Отправить в систему</button>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand(); // Разворачивает шторку на весь экран смартфона
+    <!-- 3. ВКЛАДКА: ФИЛЬТРЫ -->
+    <div id="tab-filters" class="tab-content">
+        <!-- Выбор даты обслуживания (Календарь для заднего числа) -->
+        <div class="input-group" style="background: #fdfdfd; padding: 10px; border-radius: 8px; border: 1px dashed #ccc;">
+            <label for="maintenance-date" style="text-align: center; display: block; margin-bottom: 5px;">📅 Дата проведения ТО:</label>
+            <input type="date" id="maintenance-date" style="text-align: center;">
+        </div>
 
-        function submitData() {
-            const dayVal = document.getElementById('day').value.trim();
-            const nightVal = document.getElementById('night').value.trim();
-            const gasVal = document.getElementById('gas').value.trim();
+        <br>
 
-            if (!dayVal || !nightVal || !gasVal) {
-                alert('Ошибка: Все три поля должны быть заполнены.');
-                return;
-            }
+        <!-- Под-вкладки (Кухня / Котельная) -->
+        <div class="sub-tabs">
+            <button id="sub-btn-kitchen" class="sub-tab-btn active-kitchen" onclick="switchSubTab('kitchen')">🍳 Кухня</button>
+            <button id="sub-btn-boiler" class="sub-tab-btn" onclick="switchSubTab('boiler')">🎛️ Котельная</button>
+        </div>
 
-            // Формируем чистую строку через пробелы для старого сплита в Make
-            const dataString = `${dayVal} ${nightVal} ${gasVal}`;
+        <!-- Раздел КУХНЯ -->
+        <div id="sub-kitchen" class="sub-content">
+            <button class="filter-btn btn-kitchen" onclick="sendMaintenance('Кухня', 'Комплект картриджей: K5, K2, K7M')">
+                <span>Замена комплекта K5, K2, K7M</span> ➔
+            </button>
+            <button class="filter-btn btn-kitchen" onclick="sendMaintenance('Кухня', 'Мембранный модуль: K-50S')">
+                <span>Замена мембраны K-50S</span> ➔
+            </button>
+        </div>
+
+        <!-- Раздел КОТЕЛЬНАЯ -->
+        <div id="sub-boiler" class="sub-content" style="display:none;">
+            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Входной фильтр (20BB, 5 мкм, намоточный)')">
+                <span>Замена Входного фильтра (20BB)</span> ➔
+            </button>
+            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Выходной фильтр (20BB, угольный)')">
+                <span>Замена Выходного фильтра (20BB)</span> ➔
+            </button>
             
-            tg.sendData(dataString); // Отправляет данные боту и закрывает мини-апп
+            <div class="warn-box">
+                ⚠️ <strong>Внимание!</strong> Во время обслуживания колонны аэрации обязательно проверьте давление в гидроаккумуляторе. Давление включения реле РМ-5 минус десять процентов. <br><em>Пример: Давление включения 3.0 бар - 10% = 2.7 бар.</em>
+            </div>
+            
+            <button class="filter-btn btn-warn" onclick="sendMaintenance('Котельная', 'Колонна аэрации')">
+                <span>Обслуживание Колонны аэрации</span> ➔
+            </button>
+            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Колонна обезжелезивания')">
+                <span>Обслуживание Колонны обезжелезивания</span> ➔
+            </button>
+            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Колонна умягчения')">
+                <span>Обслуживание Колонны умягчения</span> ➔
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Инициализация Telegram WebApp
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    // Автоподстановка сегодняшнего числа во все календари
+    const todayStr = new Date().toISOString().split('T')[0];
+    document.getElementById('maintenance-date').value = todayStr;
+    document.getElementById('salt-date').value = todayStr;
+
+    // Переключение главных вкладок
+    function switchMainTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+
+        document.querySelectorAll('.main-tab-btn').forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+    }
+
+    // Переключение под-вкладок фильтров (Кухня / Котельная)
+    function switchSubTab(target) {
+        const kBtn = document.getElementById('sub-btn-kitchen');
+        const bBtn = document.getElementById('sub-btn-boiler');
+        
+        if (target === 'kitchen') {
+            document.getElementById('sub-kitchen').style.display = 'block';
+            document.getElementById('sub-boiler').style.display = 'none';
+            kBtn.className = 'sub-tab-btn active-kitchen';
+            bBtn.className = 'sub-tab-btn';
+        } else {
+            document.getElementById('sub-kitchen').style.display = 'none';
+            document.getElementById('sub-boiler').style.display = 'block';
+            kBtn.className = 'sub-tab-btn';
+            bBtn.className = 'sub-tab-btn active-boiler';
         }
-    </script>
+    }
+
+    // Вспомогательная функция перевода YYYY-MM-DD в DD.MM.YYYY
+    function formatDate(rawDate) {
+        const parts = rawDate.split('-');
+        return `${parts[2]}.${parts[1]}.${parts[0]}`;
+    }
+
+    // 1. Отправка ПОКАЗАНИЙ (передаем пробелы, как раньше ждал твой Make-сценарий)
+    function sendResources() {
+        const elecDay = document.getElementById('elec-day').value;
+        const elecNight = document.getElementById('elec-night').value;
+        const gas = document.getElementById('gas').value;
+
+        if (!elecDay || !elecNight || !gas) {
+            alert("Пожалуйста, заполните все показания!");
+            return;
+        }
+
+        // Сохраняем исходный формат: "День Ночь Газ"
+        const payload = `${elecDay} ${elecNight} ${gas}`;
+        tg.sendData(payload);
+        tg.close();
+    }
+
+    // 2. Отправка СОЛИ
+    function sendSalt() {
+        const saltDate = document.getElementById('salt-date').value;
+        const count = document.getElementById('salt-count').value;
+        
+        if (!saltDate || !count) return;
+        
+        // Формат: "salt;количество;дата"
+        const payload = `salt;${count};${formatDate(saltDate)}`;
+        tg.sendData(payload);
+        tg.close();
+    }
+
+    // 3. Отправка ОБСЛУЖИВАНИЯ ФИЛЬТРОВ (с выбранной датой!)
+    function sendMaintenance(room, object) {
+        const maintenanceDate = document.getElementById('maintenance-date').value;
+        if (!maintenanceDate) {
+            alert("Пожалуйста, выберите дату обслуживания!");
+            return;
+        }
+
+        // Формат: "service;Помещение;Объект;Дата"
+        const payload = `service;${room};${object};${formatDate(maintenanceDate)}`;
+        tg.sendData(payload);
+        tg.close();
+    }
+</script>
 </body>
 </html>
