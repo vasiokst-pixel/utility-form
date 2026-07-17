@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мониторинг загородного дома</title>
+    <title>RedHouse Engine</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -38,6 +38,20 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
             box-sizing: border-box;
             border: 1px solid var(--border-color);
+        }
+
+        /* Брендовый заголовок */
+        .app-header {
+            font-size: 18px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 16px;
+            color: #ffffff;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #ef4444, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         /* Главные вкладки */
@@ -202,6 +216,9 @@
 <body>
 
 <div class="container">
+    <!-- Заголовок системы -->
+    <div class="app-header">RedHouse Engine</div>
+
     <!-- Навигация верхнего уровня -->
     <div class="main-tabs">
         <button class="main-tab-btn active" onclick="switchMainTab('tab-resources')">📊 Показания</button>
@@ -241,7 +258,7 @@
 
     <!-- 3. ВКЛАДКА: ФИЛЬТРЫ -->
     <div id="tab-filters" class="tab-content">
-        <!-- Выбор даты обслуживания (Календарь для заднего числа) -->
+        <!-- Выбор даты обслуживания -->
         <div class="input-group" style="background: #18181b; padding: 10px; border-radius: 8px; border: 1px dashed #3f3f46;">
             <label for="maintenance-date" style="text-align: center; display: block; margin-bottom: 5px;">📅 Дата проведения ТО:</label>
             <input type="date" id="maintenance-date" style="text-align: center;">
