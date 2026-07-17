@@ -212,16 +212,16 @@
     <!-- 1. ВКЛАДКА: ПОКАЗАНИЯ -->
     <div id="tab-resources" class="tab-content active">
         <div class="input-group">
-            <label>Эл. День (Показания):</label>
-            <input type="number" step="0.1" id="elec-day" placeholder="например, 2288.6">
+            <label>Электроэнергия (День):</label>
+            <input type="number" step="0.1" id="elec-day" placeholder="Пример: 2288.6">
         </div>
         <div class="input-group">
-            <label>Эл. Ночь (Показания):</label>
-            <input type="number" step="0.1" id="elec-night" placeholder="например, 1107.4">
+            <label>Электроэнергия (Ночь):</label>
+            <input type="number" step="0.1" id="elec-night" placeholder="Пример: 1107.4">
         </div>
         <div class="input-group">
-            <label>Газ (Показания):</label>
-            <input type="number" id="gas" placeholder="например, 31736">
+            <label>Газ:</label>
+            <input type="number" id="gas" placeholder="Пример: 31736">
         </div>
         <button class="btn-send" onclick="sendResources()">Отправить показания</button>
     </div>
@@ -229,14 +229,14 @@
     <!-- 2. ВКЛАДКА: СОЛЬ -->
     <div id="tab-salt" class="tab-content">
         <div class="input-group">
-            <label>Дата добавления соли:</label>
+            <label>Дата добавления соли в бак:</label>
             <input type="date" id="salt-date">
         </div>
         <div class="input-group">
-            <label>Количество мешков (по 25 кг):</label>
+            <label>Количество мешков (25 кг):</label>
             <input type="number" id="salt-count" value="1" min="1">
         </div>
-        <button class="btn-send" style="background:#a855f7;" onclick="sendSalt()">Зафиксировать соль</button>
+        <button class="btn-send" style="background:#a855f7;" onclick="sendSalt()">Отправить информацию</button>
     </div>
 
     <!-- 3. ВКЛАДКА: ФИЛЬТРЫ -->
