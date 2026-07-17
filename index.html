@@ -7,14 +7,14 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: #09090b; /* Глубокий черный */
-            --text-color: #f4f4f5; /* Светлый текст */
-            --container-bg: #18181b; /* Темно-серый контейнер */
-            --border-color: #27272a; /* Границы */
-            --primary-color: #3b82f6; /* Электрик блю */
-            --kitchen-color: #10b981; /* Изумрудный зеленый */
-            --boiler-color: #0284c7; /* Синий котельной */
-            --warn-color: #f59e0b; /* Янтарный */
+            --bg-color: #09090b;
+            --text-color: #f4f4f5;
+            --container-bg: #18181b;
+            --border-color: #27272a;
+            --primary-color: #3b82f6;
+            --kitchen-color: #10b981;
+            --boiler-color: #0284c7;
+            --warn-color: #f59e0b;
         }
 
         body {
@@ -40,12 +40,11 @@
             border: 1px solid var(--border-color);
         }
 
-        /* Стильный логотип RH Engine */
         .app-header {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4px; /* Уменьшили расстояние до минимума для плотности */
+            gap: 4px;
             font-size: 24px;
             font-weight: 900;
             text-align: center;
@@ -54,18 +53,16 @@
             text-transform: uppercase;
         }
 
-        /* Градиент для текста с глубокой фиолетовой основой */
         .app-header span {
             background: linear-gradient(90deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* Интегрированная SVG-шестеренка с анимацией */
         .logo-gear {
             width: 28px;
             height: 28px;
-            animation: spin 15s linear infinite; /* Плавное вращение */
+            animation: spin 15s linear infinite;
         }
 
         @keyframes spin {
@@ -73,7 +70,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Главные вкладки */
         .main-tabs {
             display: flex;
             background: #27272a;
@@ -109,7 +105,6 @@
             display: block;
         }
 
-        /* Поля ввода (Показания) */
         .input-group {
             margin-bottom: 14px;
             display: flex;
@@ -138,7 +133,6 @@
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
         }
 
-        /* Саб-табы для фильтров (Кухня / Котельная) */
         .sub-tabs {
             display: flex;
             gap: 10px;
@@ -170,7 +164,6 @@
             border-color: var(--boiler-color);
         }
 
-        /* Кнопки действий */
         .btn-send {
             background: var(--primary-color);
             color: #fff;
@@ -214,7 +207,6 @@
         .btn-boiler { background: var(--boiler-color); }
         .btn-warn { background: var(--warn-color); }
 
-        /* Предупреждение */
         .warn-box {
             background: #271c0a;
             border-left: 5px solid var(--warn-color);
@@ -226,40 +218,35 @@
             color: #fde047;
         }
 
-        /* Календарь для темной темы */
         input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(1); /* Делает иконку календаря белой */
+            filter: invert(1);
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- Интегрированный брендовый заголовок-логотип -->
     <div class="app-header">
         <span>RH</span>
         <svg viewBox="0 0 24 24" class="logo-gear">
             <defs>
-                <!-- Тот же фиолетово-градиентный переход для шестеренки -->
                 <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stop-color="#ec4899" />
                     <stop offset="50%" stop-color="#8b5cf6" />
                     <stop offset="100%" stop-color="#3b82f6" />
                 </linearGradient>
             </defs>
-            <path fill="url(#logo-gradient)" d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+            <path fill="url(#logo-gradient)" d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49-.12-.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
         </svg>
         <span>Engine</span>
     </div>
 
-    <!-- Навигация верхнего уровня -->
     <div class="main-tabs">
         <button class="main-tab-btn active" onclick="switchMainTab('tab-resources')">📊 Показания</button>
         <button class="main-tab-btn" onclick="switchMainTab('tab-salt')">🧂 Соль</button>
         <button class="main-tab-btn" onclick="switchMainTab('tab-filters')">🔧 Фильтры</button>
     </div>
 
-    <!-- 1. ВКЛАДКА: ПОКАЗАНИЯ -->
     <div id="tab-resources" class="tab-content active">
         <div class="input-group">
             <label>Электроэнергия (День):</label>
@@ -276,7 +263,6 @@
         <button class="btn-send" onclick="sendResources()">Отправить показания</button>
     </div>
 
-    <!-- 2. ВКЛАДКА: СОЛЬ -->
     <div id="tab-salt" class="tab-content">
         <div class="input-group">
             <label>Дата добавления соли в бак:</label>
@@ -289,23 +275,17 @@
         <button class="btn-send" style="background:#a855f7;" onclick="sendSalt()">Отправить информацию</button>
     </div>
 
-    <!-- 3. ВКЛАДКА: ФИЛЬТРЫ -->
     <div id="tab-filters" class="tab-content">
-        <!-- Выбор даты обслуживания -->
         <div class="input-group" style="background: #18181b; padding: 10px; border-radius: 8px; border: 1px dashed #3f3f46;">
             <label for="maintenance-date" style="text-align: center; display: block; margin-bottom: 5px;">📅 Дата проведения ТО:</label>
             <input type="date" id="maintenance-date" style="text-align: center;">
         </div>
-
         <br>
-
-        <!-- Под-вкладки (Кухня / Котельная) -->
         <div class="sub-tabs">
             <button id="sub-btn-kitchen" class="sub-tab-btn active-kitchen" onclick="switchSubTab('kitchen')">🍳 Кухня</button>
             <button id="sub-btn-boiler" class="sub-tab-btn" onclick="switchSubTab('boiler')">🎛️ Котельная</button>
         </div>
 
-        <!-- Раздел КУХНЯ -->
         <div id="sub-kitchen" class="sub-content">
             <button class="filter-btn btn-kitchen" onclick="sendMaintenance('Кухня', 'Комплект картриджей: K5, K2, K7M')">
                 <span>Замена комплекта K5, K2, K7M</span> ➔
@@ -315,7 +295,6 @@
             </button>
         </div>
 
-        <!-- Раздел КОТЕЛЬНАЯ -->
         <div id="sub-boiler" class="sub-content" style="display:none;">
             <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Входной фильтр (20BB, 5 мкм, намоточный)')">
                 <span>Замена Входного фильтра (20BB)</span> ➔
@@ -342,16 +321,13 @@
 </div>
 
 <script>
-    // Инициализация Telegram WebApp
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    // Автоподстановка сегодняшнего числа во все календари
     const todayStr = new Date().toISOString().split('T')[0];
     document.getElementById('maintenance-date').value = todayStr;
     document.getElementById('salt-date').value = todayStr;
 
-    // Переключение главных вкладок
     function switchMainTab(tabId) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.getElementById(tabId).classList.add('active');
@@ -360,7 +336,6 @@
         event.currentTarget.classList.add('active');
     }
 
-    // Переключение под-вкладок фильтров (Кухня / Котельная)
     function switchSubTab(target) {
         const kBtn = document.getElementById('sub-btn-kitchen');
         const bBtn = document.getElementById('sub-btn-boiler');
@@ -378,13 +353,11 @@
         }
     }
 
-    // Вспомогательная функция перевода YYYY-MM-DD в DD.MM.YYYY
     function formatDate(rawDate) {
         const parts = rawDate.split('-');
         return `${parts[2]}.${parts[1]}.${parts[0]}`;
     }
 
-    // 1. Отправка ПОКАЗАНИЙ
     function sendResources() {
         const elecDay = document.getElementById('elec-day').value;
         const elecNight = document.getElementById('elec-night').value;
@@ -400,19 +373,18 @@
         tg.close();
     }
 
-    // 2. Отправка СОЛИ
     function sendSalt() {
         const saltDate = document.getElementById('salt-date').value;
         const count = document.getElementById('salt-count').value;
         
         if (!saltDate || !count) return;
         
-        const payload = `salt;${count};${formatDate(saltDate)}`;
+        // Массив жестко зафиксирован: 4 элемента
+        const payload = `salt;Котельная;Умягчитель (мешков: ${count});${formatDate(saltDate)}`;
         tg.sendData(payload);
         tg.close();
     }
 
-    // 3. Отправка ОБСЛУЖИВАНИЯ ФИЛЬТРОВ
     function sendMaintenance(room, object) {
         const maintenanceDate = document.getElementById('maintenance-date').value;
         if (!maintenanceDate) {
