@@ -269,8 +269,8 @@
             <input type="date" id="salt-date">
         </div>
         <div class="input-group">
-            <label>Количество мешков (25 кг):</label>
-            <input type="number" id="salt-count" value="1" min="1">
+            <label>Остаток соли в баке (мешков по 25 кг):</label>
+            <input type="number" id="salt-count" value="1" min="0">
         </div>
         <button class="btn-send" style="background:#a855f7;" onclick="sendSalt()">Отправить информацию</button>
     </div>
@@ -287,19 +287,19 @@
         </div>
 
         <div id="sub-kitchen" class="sub-content">
-            <button class="filter-btn btn-kitchen" onclick="sendMaintenance('Кухня', 'Комплект картриджей: K5, K2, K7M')">
+            <button class="filter-btn btn-kitchen" onclick="sendMaintenance('Кухня', 'Комплект картриджей: K5, K2, K7M', 'Замена')">
                 <span>Замена комплекта K5, K2, K7M</span> ➔
             </button>
-            <button class="filter-btn btn-kitchen" onclick="sendMaintenance('Кухня', 'Мембранный модуль: K-50S')">
+            <button class="filter-btn btn-kitchen" onclick="sendMaintenance('Кухня', 'Мембранный модуль: K-50S', 'Замена')">
                 <span>Замена мембраны K-50S</span> ➔
             </button>
         </div>
 
         <div id="sub-boiler" class="sub-content" style="display:none;">
-            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Входной фильтр (20BB, 5 мкм, намоточный)')">
+            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Входной фильтр (20BB, 5 мкм, намоточный)', 'Замена')">
                 <span>Замена Входного фильтра (20BB)</span> ➔
             </button>
-            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Выходной фильтр (20BB, угольный)')">
+            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Выходной фильтр (20BB, угольный)', 'Замена')">
                 <span>Замена Выходного фильтра (20BB)</span> ➔
             </button>
             
@@ -307,13 +307,13 @@
                 ⚠️ <strong>Внимание!</strong> Во время обслуживания колонны аэрации обязательно проверьте давление в гидроаккумуляторе. Давление включения реле РМ-5 минус десять процентов. <br><em>Пример: Давление включения 3.0 бар - 10% = 2.7 бар.</em>
             </div>
             
-            <button class="filter-btn btn-warn" onclick="sendMaintenance('Котельная', 'Колонна аэрации')">
+            <button class="filter-btn btn-warn" onclick="sendMaintenance('Котельная', 'Колонна аэрации', 'Обслуживание')">
                 <span>Обслуживание Колонны аэрации</span> ➔
             </button>
-            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Колонна обезжелезивания')">
+            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Колонна обезжелезивания', 'Обслуживание')">
                 <span>Обслуживание Колонны обезжелезивания</span> ➔
             </button>
-            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Колонна умягчения')">
+            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Колонна умягчения', 'Обслуживание')">
                 <span>Обслуживание Колонны умягчения</span> ➔
             </button>
         </div>
@@ -375,24 +375,25 @@
 
     function sendSalt() {
         const saltDate = document.getElementById('salt-date').value;
-        const count = document.getElementById('salt-count').value;
+        const count = document.getElementById('salt-count').value; 
         
-        if (!saltDate || !count) return;
+        if (!saltDate || count === "") return;
         
-        // Массив жестко зафиксирован: 4 элемента
-        const payload = `salt;Котельная;Умягчитель (мешков: ${count});${formatDate(saltDate)}`;
+        // 6 элементов: Триггер ; Помещение ; Объект ; Дата ; Действие ; Сырое число (для триггера)
+        const payload = `salt;Котельная;Реагентный бак (остаток: ${count} мешков);${formatDate(saltDate)};Загрузка соли;${count}`;
         tg.sendData(payload);
         tg.close();
     }
 
-    function sendMaintenance(room, object) {
+    function sendMaintenance(room, object, action) {
         const maintenanceDate = document.getElementById('maintenance-date').value;
         if (!maintenanceDate) {
             alert("Пожалуйста, выберите дату обслуживания!");
             return;
         }
 
-        const payload = `service;${room};${object};${formatDate(maintenanceDate)}`;
+        // 5 элементов: Триггер ; Помещение ; Объект ; Дата ; Действие
+        const payload = `service;${room};${object};${formatDate(maintenanceDate)};${action}`;
         tg.sendData(payload);
         tg.close();
     }
