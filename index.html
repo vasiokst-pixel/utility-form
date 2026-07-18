@@ -130,7 +130,8 @@
         }
 
         .input-group input {
-            padding: 12px;
+            height: 45px;
+            padding: 0 12px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 16px;
@@ -143,6 +144,13 @@
             display: block;
             min-width: 0;
             max-width: 100%;
+        }
+
+        /* Жесткое подавление анальных мобильных стилей iOS WebKit для дат */
+        .input-group input[type="date"] {
+            -webkit-appearance: none;
+            appearance: none;
+            text-align: left;
         }
 
         .input-group input:focus {
