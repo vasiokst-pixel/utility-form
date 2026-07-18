@@ -7,14 +7,15 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: #09090b;
-            --text-color: #f4f4f5;
-            --container-bg: #18181b;
-            --border-color: #27272a;
-            --primary-color: #3b82f6;
-            --kitchen-color: #10b981;
-            --boiler-color: #0284c7;
-            --warn-color: #f59e0b;
+            --bg-color: #070509;
+            --text-color: #f3e8ff;
+            --container-bg: #120e1a;
+            --border-color: #2e1f47;
+            --primary-color: #a855f7;
+            --primary-glow: 0 0 14px rgba(168, 85, 247, 0.6);
+            --dark-purple: #24143a;
+            --light-purple: #c084fc;
+            --neon-magenta: #d946ef;
         }
 
         body {
@@ -35,7 +36,7 @@
             background: var(--container-bg);
             padding: 18px;
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 25px rgba(0,0,0,0.7), 0 0 15px rgba(168, 85, 247, 0.1);
             box-sizing: border-box;
             border: 1px solid var(--border-color);
         }
@@ -44,7 +45,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            gap: 6px;
             font-size: 24px;
             font-weight: 900;
             text-align: center;
@@ -54,7 +55,7 @@
         }
 
         .app-header span {
-            background: linear-gradient(90deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
+            background: linear-gradient(90deg, var(--light-purple) 0%, var(--primary-color) 50%, #6b21a8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -72,10 +73,11 @@
 
         .main-tabs {
             display: flex;
-            background: #27272a;
+            background: #1a1326;
             border-radius: 10px;
             padding: 3px;
             margin-bottom: 20px;
+            border: 1px solid var(--border-color);
         }
 
         .main-tab-btn {
@@ -85,16 +87,18 @@
             border: none;
             font-weight: 600;
             font-size: 13px;
-            color: #a1a1aa;
+            color: #7c6e91;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
         }
 
         .main-tab-btn.active {
-            background: #3f3f46;
+            background: var(--dark-purple);
             color: #ffffff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            border-bottom: 2px solid var(--primary-color);
+            box-shadow: 0 4px 12px -2px rgba(168, 85, 247, 0.5);
         }
 
         .tab-content {
@@ -115,7 +119,7 @@
             font-weight: 600;
             font-size: 14px;
             margin-bottom: 6px;
-            color: #a1a1aa;
+            color: #9d8cb5;
         }
 
         .input-group input {
@@ -124,13 +128,14 @@
             border-radius: 8px;
             font-size: 16px;
             outline: none;
-            background: #09090b;
+            background: #0f0b16;
             color: #ffffff;
+            transition: all 0.2s;
         }
 
         .input-group input:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+            box-shadow: var(--primary-glow);
         }
 
         .sub-tabs {
@@ -142,9 +147,9 @@
         .sub-tab-btn {
             flex: 1;
             padding: 10px;
-            background: #27272a;
+            background: #1a1326;
             border: 1px solid var(--border-color);
-            color: #a1a1aa;
+            color: #9d8cb5;
             border-radius: 8px;
             font-weight: 600;
             font-size: 14px;
@@ -152,22 +157,18 @@
             transition: all 0.2s ease;
         }
 
-        .sub-tab-btn.active-kitchen {
-            background: var(--kitchen-color);
-            color: #fff;
-            border-color: var(--kitchen-color);
-        }
-
+        .sub-tab-btn.active-kitchen,
         .sub-tab-btn.active-boiler {
-            background: var(--boiler-color);
+            background: var(--dark-purple);
             color: #fff;
-            border-color: var(--boiler-color);
+            border-color: var(--primary-color);
+            box-shadow: var(--primary-glow), inset 0 -1px 0 var(--primary-color);
         }
 
         .btn-send {
             background: var(--primary-color);
             color: #fff;
-            border: none;
+            border: 1px solid var(--light-purple);
             border-radius: 8px;
             padding: 14px;
             font-size: 16px;
@@ -175,18 +176,19 @@
             width: 100%;
             cursor: pointer;
             margin-top: 10px;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(168, 85, 247, 0.2);
         }
 
         .btn-send:active {
-            opacity: 0.8;
+            box-shadow: var(--primary-glow);
+            filter: brightness(1.2);
         }
 
         .filter-btn {
             width: 100%;
             padding: 14px;
             margin-bottom: 10px;
-            border: none;
             border-radius: 8px;
             font-size: 15px;
             font-weight: 600;
@@ -196,30 +198,42 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: opacity 0.2s;
+            transition: all 0.2s;
         }
 
         .filter-btn:active {
-            opacity: 0.8;
+            box-shadow: var(--primary-glow);
+            filter: brightness(1.2);
         }
 
-        .btn-kitchen { background: var(--kitchen-color); }
-        .btn-boiler { background: var(--boiler-color); }
-        .btn-warn { background: var(--warn-color); }
+        .btn-kitchen { 
+            background: #2e1065; 
+            border: 1px solid var(--primary-color); 
+        }
+        .btn-boiler { 
+            background: #4c1d95; 
+            border: 1px solid var(--light-purple); 
+        }
+        .btn-warn { 
+            background: #581c87; 
+            border: 1px solid var(--neon-magenta); 
+            box-shadow: 0 0 10px rgba(217, 70, 239, 0.2);
+        }
 
         .warn-box {
-            background: #271c0a;
-            border-left: 5px solid var(--warn-color);
+            background: #201130;
+            border-left: 5px solid var(--neon-magenta);
             padding: 12px;
             margin-bottom: 15px;
             border-radius: 4px;
             font-size: 13px;
             line-height: 1.4;
-            color: #fde047;
+            color: #f5d0ff;
+            box-shadow: inset 0 0 8px rgba(217, 70, 239, 0.1);
         }
 
         input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(1);
+            filter: invert(0.8) sepia(1) saturate(5) hue-rotate(230deg);
         }
     </style>
 </head>
@@ -231,9 +245,9 @@
         <svg viewBox="0 0 24 24" class="logo-gear">
             <defs>
                 <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#ec4899" />
-                    <stop offset="50%" stop-color="#8b5cf6" />
-                    <stop offset="100%" stop-color="#3b82f6" />
+                    <stop offset="0%" stop-color="#c084fc" />
+                    <stop offset="50%" stop-color="#a855f7" />
+                    <stop offset="100%" stop-color="#6b21a8" />
                 </linearGradient>
             </defs>
             <path fill="url(#logo-gradient)" d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49-.12-.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
@@ -272,11 +286,11 @@
             <label>Остаток соли в баке (мешков по 25 кг):</label>
             <input type="number" id="salt-count" value="1" min="0">
         </div>
-        <button class="btn-send" style="background:#a855f7;" onclick="sendSalt()">Отправить информацию</button>
+        <button class="btn-send" style="background:var(--primary-color);" onclick="sendSalt()">Отправить информацию</button>
     </div>
 
     <div id="tab-filters" class="tab-content">
-        <div class="input-group" style="background: #18181b; padding: 10px; border-radius: 8px; border: 1px dashed #3f3f46;">
+        <div class="input-group" style="background: #120e1a; padding: 10px; border-radius: 8px; border: 1px dashed var(--border-color);">
             <label for="maintenance-date" style="text-align: center; display: block; margin-bottom: 5px;">📆 Дата проведения ТО:</label>
             <input type="date" id="maintenance-date" style="text-align: center;">
         </div>
@@ -379,7 +393,6 @@
         
         if (!saltDate || count === "") return;
         
-        // 6 элементов: Триггер ; Помещение ; Объект ; Дата ; Действие ; Сырое число (для триггера)
         const payload = `salt;Котельная;Реагентный бак (остаток: ${count} мешков);${formatDate(saltDate)};Загрузка соли;${count}`;
         tg.sendData(payload);
         tg.close();
@@ -392,7 +405,6 @@
             return;
         }
 
-        // 5 элементов: Триггер ; Помещение ; Объект ; Дата ; Действие
         const payload = `service;${room};${object};${formatDate(maintenanceDate)};${action}`;
         tg.sendData(payload);
         tg.close();
