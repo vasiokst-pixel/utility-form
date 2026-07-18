@@ -17,6 +17,7 @@
             --light-purple: #c084fc;
             --neon-magenta: #d946ef;
             --neon-red: #ff3333;
+            --btn-bg-unified: #2e1065;
         }
 
         body {
@@ -137,6 +138,8 @@
             background: #0f0b16;
             color: #ffffff;
             transition: all 0.2s;
+            box-sizing: border-box;
+            width: 100%;
         }
 
         .input-group input:focus {
@@ -172,6 +175,8 @@
         }
 
         .btn-send {
+            background: var(--btn-bg-unified);
+            border: 1px solid var(--primary-color);
             color: #fff;
             border-radius: 8px;
             padding: 14px;
@@ -185,12 +190,14 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
-        .btn-send:active {
+        .btn-send:active, .filter-btn:active {
             box-shadow: var(--primary-glow);
             filter: brightness(1.2);
         }
 
         .filter-btn {
+            background: var(--btn-bg-unified);
+            border: 1px solid var(--primary-color);
             width: 100%;
             padding: 14px;
             margin-bottom: 10px;
@@ -204,25 +211,12 @@
             justify-content: space-between;
             align-items: center;
             transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            box-sizing: border-box;
         }
 
-        .filter-btn:active {
-            box-shadow: var(--primary-glow);
-            filter: brightness(1.2);
-        }
-
-        .btn-kitchen { 
-            background: #2e1065; 
-            border: 1px solid var(--primary-color); 
-        }
-        .btn-boiler { 
-            background: #4c1d95; 
-            border: 1px solid var(--light-purple); 
-        }
         .btn-warn { 
-            background: #581c87; 
-            border: 1px solid var(--neon-magenta); 
-            box-shadow: 0 0 10px rgba(217, 70, 239, 0.2);
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
         }
 
         .warn-box {
@@ -263,7 +257,7 @@
     <div class="main-tabs">
         <button class="main-tab-btn active" onclick="switchMainTab('tab-resources')">⚡ Показания</button>
         <button class="main-tab-btn" onclick="switchMainTab('tab-salt')">🧂 Соль</button>
-        <button class="main-tab-btn" onclick="switchMainTab('tab-filters')">💧 Фильтры</button>
+        <button class="main-tab-btn" onclick="switchMainTab('tab-filters')">🔧 Фильтры</button>
     </div>
 
     <div id="tab-resources" class="tab-content active">
@@ -279,7 +273,7 @@
             <label>Газ:</label>
             <input type="number" id="gas" placeholder="Пример: 31736">
         </div>
-        <button class="btn-send btn-kitchen" onclick="sendResources()">Отправить показания</button>
+        <button class="btn-send" onclick="sendResources()">Отправить показания</button>
     </div>
 
     <div id="tab-salt" class="tab-content">
@@ -291,34 +285,34 @@
             <label>Остаток соли в баке (мешков по 25 кг):</label>
             <input type="number" id="salt-count" value="1" min="0">
         </div>
-        <button class="btn-send btn-boiler" onclick="sendSalt()">Отправить информацию</button>
+        <button class="btn-send" onclick="sendSalt()">Отправить информацию</button>
     </div>
 
     <div id="tab-filters" class="tab-content">
-        <div class="input-group" style="background: #120e1a; padding: 10px; border-radius: 8px; border: 1px dashed var(--border-color);">
-            <label for="maintenance-date" style="text-align: center; display: block; margin-bottom: 5px;"> Дата проведения ТО:</label>
-            <input type="date" id="maintenance-date" style="text-align: center;">
+        <div class="input-group">
+            <label for="maintenance-date">📆 Дата проведения ТО:</label>
+            <input type="date" id="maintenance-date">
         </div>
-        <br>
+        
         <div class="sub-tabs">
-            <button id="sub-btn-kitchen" class="sub-tab-btn active-kitchen" onclick="switchSubTab('kitchen')"> Кухня</button>
-            <button id="sub-btn-boiler" class="sub-tab-btn" onclick="switchSubTab('boiler')"> Котельная</button>
+            <button id="sub-btn-kitchen" class="sub-tab-btn active-kitchen" onclick="switchSubTab('kitchen')">🚰 Кухня</button>
+            <button id="sub-btn-boiler" class="sub-tab-btn" onclick="switchSubTab('boiler')">🔄 Котельная</button>
         </div>
 
         <div id="sub-kitchen" class="sub-content">
-            <button class="filter-btn btn-kitchen" onclick="sendMaintenance('Кухня', 'Комплект картриджей: K5, K2, K7M', 'Замена')">
+            <button class="filter-btn" onclick="sendMaintenance('Кухня', 'Комплект картриджей: K5, K2, K7M', 'Замена')">
                 <span>Замена комплекта K5, K2, K7M</span> ➔
             </button>
-            <button class="filter-btn btn-kitchen" onclick="sendMaintenance('Кухня', 'Мембранный модуль: K-50S', 'Замена')">
+            <button class="filter-btn" onclick="sendMaintenance('Кухня', 'Мембранный модуль: K-50S', 'Замена')">
                 <span>Замена мембраны K-50S</span> ➔
             </button>
         </div>
 
         <div id="sub-boiler" class="sub-content" style="display:none;">
-            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Входной фильтр (20BB, 5 мкм, намоточный)', 'Замена')">
+            <button class="filter-btn" onclick="sendMaintenance('Котельная', 'Входной фильтр (20BB, 5 мкм, намоточный)', 'Замена')">
                 <span>Замена Входного фильтра 20BB (намоточный)</span> ➔
             </button>
-            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Выходной фильтр (20BB, угольный)', 'Замена')">
+            <button class="filter-btn" onclick="sendMaintenance('Котельная', 'Выходной фильтр (20BB, угольный)', 'Замена')">
                 <span>Замена Выходного фильтра 20BB (угольный)</span> ➔
             </button>
             
@@ -329,10 +323,10 @@
             <button class="filter-btn btn-warn" onclick="sendMaintenance('Котельная', 'Колонна аэрации', 'Обслуживание')">
                 <span>Обслуживание Колонны аэрации</span> ➔
             </button>
-            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Колонна обезжелезивания', 'Обслуживание')">
+            <button class="filter-btn" onclick="sendMaintenance('Котельная', 'Колонна обезжелезивания', 'Обслуживание')">
                 <span>Обслуживание Колонны обезжелезивания</span> ➔
             </button>
-            <button class="filter-btn btn-boiler" onclick="sendMaintenance('Котельная', 'Колонна умягчения', 'Обслуживание')">
+            <button class="filter-btn" onclick="sendMaintenance('Котельная', 'Колонна умягчения', 'Обслуживание')">
                 <span>Обслуживание Колонны умягчения</span> ➔
             </button>
         </div>
